@@ -21,6 +21,8 @@
 #include <Commands/Screenshot.h>
 #include <Commands/SetProperty.h>
 #include <Commands/Wait.h>
+#include <Commands/DragItem.h>
+#include <Commands/ColorPick.h>
 
 namespace spix {
 
@@ -54,9 +56,9 @@ void TestServer::wait(std::chrono::milliseconds waitTime)
     m_cmdExec->enqueueCommand<cmd::Wait>(waitTime);
 }
 
-void TestServer::mouseClick(ItemPath path)
+void TestServer::mouseClick(ItemPath path, bool eventToItem)
 {
-    m_cmdExec->enqueueCommand<cmd::ClickOnItem>(path);
+    m_cmdExec->enqueueCommand<cmd::ClickOnItem>(path, eventToItem);
 }
 
 void TestServer::mouseBeginDrag(ItemPath path)
@@ -119,9 +121,24 @@ std::vector<std::string> TestServer::getErrors()
     return result.get();
 }
 
+void TestServer::dragItem(ItemPath path, int x, int y)
+{
+    m_cmdExec->enqueueCommand<cmd::DragItem>(path, x,y);
+}
+
 void TestServer::takeScreenshot(ItemPath targetItem, std::string filePath)
 {
     m_cmdExec->enqueueCommand<cmd::Screenshot>(targetItem, std::move(filePath));
+}
+
+std::string TestServer::pickColorAt(ItemPath path, int x, int y)
+{
+    std::promise<std::string> promise;
+    auto result = promise.get_future();
+    auto cmd = std::make_unique<cmd::ColorPick>(path,x,y,std::move(promise));
+    m_cmdExec->enqueueCommand(std::move(cmd));
+
+    return result.get();
 }
 
 void TestServer::quit()

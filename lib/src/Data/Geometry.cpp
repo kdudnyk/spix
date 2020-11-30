@@ -20,4 +20,11 @@ Point::Point(Real x, Real y)
 {
 }
 
+Color::Color(int r, int g, int b)
+: r(r)
+, g(g)
+, b(b)
+{
+}
+
 } // namespace spix

@@ -7,20 +7,23 @@
 #pragma once
 
 #include "Command.h"
-#include <Spix/Data/ItemPosition.h>
+#include <Spix/Data/ItemPath.h>
+#include <future>
 
 namespace spix {
 namespace cmd {
 
-class ClickOnItem : public Command {
+class ColorPick : public Command {
 public:
-    ClickOnItem(ItemPosition path, bool eventToItem = false);
+    ColorPick(ItemPath targetItemPath, int x, int y, std::promise<std::string> promise);
 
     void execute(CommandEnvironment& env) override;
 
 private:
-    ItemPosition m_position;
-    bool m_eventToItem;
+    ItemPath m_itemPath;
+    int m_x;
+    int m_y;
+    std::promise<std::string> m_promise;
 };
 
 } // namespace cmd

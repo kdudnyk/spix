@@ -24,4 +24,12 @@ struct Point {
     Real y;
 };
 
+struct Color {
+    Color(int r, int g, int b);
+
+    int r;
+    int g;
+    int b;
+};
+
 } // namespace spix

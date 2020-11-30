@@ -28,11 +28,6 @@ AnyRpcServer::AnyRpcServer(int anyrpcPort)
 
     utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseClick", "Click on the object at the given path",
         [this](std::string path) { mouseClick(std::move(path)); });
-
-
-    utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseClickToItem", "Click on the object at the given path",
-        [this](std::string path) { mouseClick(std::move(path), true); });
-
     utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseBeginDrag", "Begin a drag with the mouse",
         [this](std::string path) { mouseBeginDrag(std::move(path)); });
     utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseEndDrag", "End a drag with the mouse",
@@ -45,18 +40,6 @@ AnyRpcServer::AnyRpcServer(int anyrpcPort)
         [this](std::string path, std::string text) { inputText(std::move(path), std::move(text)); });
     utils::AddFunctionToAnyRpc<void(std::string, int, unsigned)>(methodManager, "enterKey", "Press and release a key",
         [this](std::string path, int keyCode, unsigned modifiers) { enterKey(std::move(path), keyCode, modifiers); });
-
-    utils::AddFunctionToAnyRpc<void(std::string, int, int)>(
-        methodManager, "dragItem", "Press and drag an item",
-        [this](std::string path, int x, int y) {
-            dragItem(std::move(path), x,y);
-        });
-    
-
-    utils::AddFunctionToAnyRpc<std::string(std::string, int, int)>(methodManager, "colorAt", "Get a color at position",
-        [this](std::string path, int x, int y) { 
-            return pickColorAt(std::move(path), x, y); 
-        });
 
     utils::AddFunctionToAnyRpc<std::string(std::string, std::string)>(methodManager, "getStringProperty",
         "Return a property as string", [this](std::string path, std::string property) {

@@ -7,20 +7,23 @@
 #pragma once
 
 #include "Command.h"
-#include <Spix/Data/ItemPosition.h>
+#include <Spix/Data/ItemPath.h>
 
 namespace spix {
 namespace cmd {
 
-class ClickOnItem : public Command {
+class CompleteDrag : public Command {
 public:
-    ClickOnItem(ItemPosition path, bool eventToItem = false);
+    CompleteDrag(ItemPath path, int from_x, int from_y, int to_x, int to_y);
 
     void execute(CommandEnvironment& env) override;
 
 private:
-    ItemPosition m_position;
-    bool m_eventToItem;
+    ItemPath m_path;
+    int m_from_x;
+    int m_from_y;
+    int m_to_x;
+    int m_to_y;
 };
 
 } // namespace cmd

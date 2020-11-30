@@ -91,7 +91,7 @@ void sendQtKeyEvent(Item* item, bool press, int keyCode, QtEvents::KeyModifier m
 
 } // namespace
 
-void QtEvents::mouseDown(Item* item, Point loc, MouseButton button)
+void QtEvents::mouseDown(Item* item, Point loc, MouseButton button, bool eventToItem)
 {
     QPointF windowLoc;
     auto window = getWindowAndPositionForItem(item, loc, windowLoc);
@@ -102,23 +102,51 @@ void QtEvents::mouseDown(Item* item, Point loc, MouseButton button)
     Qt::MouseButton eventCausingButton = getQtMouseButtonValue(button);
     Qt::MouseButtons activeButtons = getQtMouseButtonValue(m_pressedMouseButtons);
 
-    QMouseEvent* event = new QMouseEvent(QEvent::MouseButtonPress, windowLoc, eventCausingButton, activeButtons, 0);
-    QGuiApplication::postEvent(window, event);
+
+    auto qtitem = dynamic_cast<QtItem*>(item);
+    if (!qtitem) {
+        return;
+    }
+
+    if (eventToItem) {
+        const QPointF qtlocalPoint(loc.x, loc.y);
+        QMouseEvent* event
+            = new QMouseEvent(QEvent::MouseButtonPress, qtlocalPoint, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(qtitem->qquickitem(), event);
+    } else {
+        QMouseEvent* event = new QMouseEvent(QEvent::MouseButtonPress, windowLoc, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(window, event);
+    }
+
 }
 
-void QtEvents::mouseUp(Item* item, Point loc, MouseButton button)
+void QtEvents::mouseUp(Item* item, Point loc, MouseButton button, bool eventToItem)
 {
     QPointF windowLoc;
     auto window = getWindowAndPositionForItem(item, loc, windowLoc);
     if (!window)
         return;
 
+        auto qtitem = dynamic_cast<QtItem*>(item);
+    if (!qtitem) {
+        return;
+    }
+
     m_pressedMouseButtons ^= button;
     Qt::MouseButton eventCausingButton = getQtMouseButtonValue(button);
     Qt::MouseButtons activeButtons = getQtMouseButtonValue(m_pressedMouseButtons);
 
-    QMouseEvent* event = new QMouseEvent(QEvent::MouseButtonRelease, windowLoc, eventCausingButton, activeButtons, 0);
-    QGuiApplication::postEvent(window, event);
+    if (eventToItem) {
+        const QPointF qtlocalPoint(loc.x, loc.y);
+        QMouseEvent* event
+            = new QMouseEvent(QEvent::MouseButtonRelease, qtlocalPoint, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(qtitem->qquickitem(), event);
+    } else {
+        QMouseEvent* event
+            = new QMouseEvent(QEvent::MouseButtonRelease, windowLoc, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(window, event);
+    }
+ 
 }
 
 void QtEvents::mouseMove(Item* item, Point loc)

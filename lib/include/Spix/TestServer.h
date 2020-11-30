@@ -38,7 +38,7 @@ public:
 
     // Commands
     void wait(std::chrono::milliseconds waitTime);
-    void mouseClick(ItemPath path);
+    void mouseClick(ItemPath path, bool eventToItem = false);
     void mouseBeginDrag(ItemPath path);
     void mouseEndDrag(ItemPath path);
     void mouseDropUrls(ItemPath path, const std::vector<std::string>& urls);
@@ -51,7 +51,10 @@ public:
     bool existsAndVisible(ItemPath path);
     std::vector<std::string> getErrors();
 
+    void dragItem(ItemPath path, int x, int y);
+
     void takeScreenshot(ItemPath targetItem, std::string filePath);
+    std::string pickColorAt(ItemPath path, int x, int y);
     void quit();
 
 protected:
