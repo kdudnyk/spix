@@ -18,6 +18,7 @@ public:
     void mouseDown(Item* item, Point loc, MouseButton button, bool signalToItem) override;
     void mouseUp(Item* item, Point loc, MouseButton button, bool signalToItem) override;
     void mouseMove(Item* item, Point loc) override;
+    void mouseDoubleClick(Item* item, Point loc, MouseButton button, bool eventToItem = false);
     void stringInput(Item* item, const std::string& text) override;
     void keyPress(Item* item, int keyCode, KeyModifier mod) override;
     void keyRelease(Item* item, int keyCode, KeyModifier mod) override;

@@ -26,6 +26,8 @@ set(SOURCES
 
     src/Commands/ClickOnItem.cpp
     src/Commands/ClickOnItem.h
+    src/Commands/DoubleClickOnItem.cpp
+    src/Commands/DoubleClickOnItem.h
     src/Commands/Command.cpp
     src/Commands/Command.h
     src/Commands/ColorPick.cpp

@@ -29,6 +29,8 @@ AnyRpcServer::AnyRpcServer(int anyrpcPort)
     utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseClick", "Click on the object at the given path",
         [this](std::string path) { mouseClick(std::move(path)); });
 
+        utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseDoubleClick", "Click on the object at the given path",
+        [this](std::string path) { mouseDoubleClick(std::move(path)); });
 
     utils::AddFunctionToAnyRpc<void(std::string)>(methodManager, "mouseClickToItem", "Click on the object at the given path",
         [this](std::string path) { mouseClick(std::move(path), true); });

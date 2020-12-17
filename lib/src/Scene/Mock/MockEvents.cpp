@@ -29,6 +29,10 @@ void MockEvents::mouseMove(Item* item, Point loc)
     }
 }
 
+void MockEvents::mouseDoubleClick(Item* item, Point loc, MouseButton button, bool eventToItem)
+{
+}
+
 void MockEvents::stringInput(Item* item, const std::string& text)
 {
     if (onStringInputEvent) {

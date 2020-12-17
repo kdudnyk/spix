@@ -104,6 +104,7 @@ void QtEvents::mouseDown(Item* item, Point loc, MouseButton button, bool eventTo
 
 
     auto qtitem = dynamic_cast<QtItem*>(item);
+
     if (!qtitem) {
         return;
     }
@@ -168,6 +169,36 @@ void QtEvents::mouseMove(Item* item, Point loc)
     windowLoc.rx() += 1;
     mouseMoveEvent = new QMouseEvent(QEvent::MouseMove, windowLoc, Qt::MouseButton::NoButton, activeButtons, 0);
     QGuiApplication::postEvent(window, mouseMoveEvent);
+}
+
+void QtEvents::mouseDoubleClick(Item* item, Point loc, MouseButton button, bool eventToItem)
+{
+    QPointF windowLoc;
+    auto window = getWindowAndPositionForItem(item, loc, windowLoc);
+    if (!window)
+        return;
+
+    m_pressedMouseButtons |= button;
+    Qt::MouseButton eventCausingButton = getQtMouseButtonValue(button);
+    Qt::MouseButtons activeButtons = getQtMouseButtonValue(m_pressedMouseButtons);
+
+    auto qtitem = dynamic_cast<QtItem*>(item);
+
+    if (!qtitem) {
+        return;
+    }
+
+    if (eventToItem) {
+        const QPointF qtlocalPoint(loc.x, loc.y);
+        QMouseEvent* event
+            = new QMouseEvent(QEvent::MouseButtonDblClick, qtlocalPoint, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(qtitem->qquickitem(), event);
+    } else {
+        QMouseEvent* event
+            = new QMouseEvent(QEvent::MouseButtonDblClick, windowLoc, eventCausingButton, activeButtons, 0);
+        QGuiApplication::postEvent(window, event);
+    }
+
 }
 
 void QtEvents::stringInput(Item* item, const std::string& text)

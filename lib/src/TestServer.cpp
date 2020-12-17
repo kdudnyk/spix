@@ -23,6 +23,7 @@
 #include <Commands/Wait.h>
 #include <Commands/DragItem.h>
 #include <Commands/ColorPick.h>
+#include <Commands/DoubleClickOnItem.h>
 
 namespace spix {
 
@@ -59,6 +60,11 @@ void TestServer::wait(std::chrono::milliseconds waitTime)
 void TestServer::mouseClick(ItemPath path, bool eventToItem)
 {
     m_cmdExec->enqueueCommand<cmd::ClickOnItem>(path, eventToItem);
+}
+
+void TestServer::mouseDoubleClick(ItemPath path, bool eventToItem)
+{
+    m_cmdExec->enqueueCommand<cmd::DoubleClickOnItem>(path);
 }
 
 void TestServer::mouseBeginDrag(ItemPath path)
